@@ -53,6 +53,41 @@ class IPv4 {
         return in;
     }
 
+    IPv4& operator++() {
+        *this = IPv4(1 + ToULong());
+        return *this;
+    }
+
+    IPv4& operator++(int) {
+        IPv4 result(*this);
+        ++(*this);
+        return result;
+    }
+
+    friend bool operator==(const IPv4& lhs, const IPv4& rhs) noexcept {
+        return lhs.ipv4_ == rhs.ipv4_;
+    }
+
+    friend bool operator!=(const IPv4& lhs, const IPv4& rhs) noexcept {
+        return !(lhs == rhs);
+    }
+
+    friend bool operator<(const IPv4& lhs, const IPv4& rhs) noexcept {
+        return lhs.ToULong() < rhs.ToULong();
+    }
+
+    friend bool operator>(const IPv4& lhs, const IPv4& rhs) noexcept {
+        return rhs < lhs;
+    }
+
+    friend bool operator>=(const IPv4& lhs, const IPv4& rhs) noexcept {
+        return !(lhs < rhs);
+    }
+
+    friend bool operator<=(const IPv4& lhs, const IPv4& rhs) noexcept {
+        return !(lhs > rhs);
+    }
+
   private:
     std::array<unsigned char, 4> ipv4_;
 };
@@ -71,5 +106,17 @@ int main() {
     std::cin >> ip;
     if (!std::cin.fail()) {
         std::cout << ip << std::endl;
+    }
+
+    std::cout << "input range: ";
+    IPv4 a1, a2;
+    std::cin >> a1 >> a2;
+    if (a2 > a1) {
+        for (IPv4 a = a1; a <= a2; a++) {
+            std::cout << a << std::endl;
+        }
+    }
+    else {
+        std::cerr << "Invalid range!" << std::endl;
     }
 }
